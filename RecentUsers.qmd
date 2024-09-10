@@ -1,5 +1,5 @@
 ---
-title: "Recent Users"
+title: "Last 10 Active Users"
 ---
 
 ```{python}
@@ -39,7 +39,7 @@ def last_active_time(dt):
   return local_time.strftime("%c")
 
 display_users = []
-for user in recent_users:
+for user in recent_users[:10]:
   local_time = datetime.strptime(user.active_time, '%Y-%m-%dT%H:%M:%SZ')
 
   display_users.append({

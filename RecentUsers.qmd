@@ -28,19 +28,27 @@ recent_users = find_users()
 
 from IPython.display import Markdown
 from tabulate import tabulate
+from datetime import *
+import pytz
+
+def last_active_time(dt):
+  utc_time = pytz.utc.localize(dt)
+  local_timezone = pytz.timezone('US/Eastern')
+  local_time = utc_time.astimezone(local_timezone)
+  # return local_time.strftime("%Y-%m-%d %-I:%M %p")
+  return local_time.strftime("%c")
 
 display_users = []
 for user in recent_users:
+  local_time = datetime.strptime(user.active_time, '%Y-%m-%dT%H:%M:%SZ')
+
   display_users.append({
     'email': user.email,
     'name': f'{user.first_name} {user.last_name}',
     'username': user.username,
-    'last_active': user.active_time
+    'last_active': last_active_time(local_time)
   })
 
-
-# fishy = ['Email', 'Name', 'Username' 'Last Active']
-# header = display_users[0].keys()
 rows = [x.values() for x in display_users]
 
 Markdown(tabulate( rows, headers=["Email", "Name", "Username", "Last Active"]))

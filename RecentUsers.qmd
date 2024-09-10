@@ -1,0 +1,47 @@
+---
+title: "Recent Users"
+---
+
+```{python}
+#| echo: false
+
+import json
+from posit.connect import Client
+
+def sort_by_login(user):
+  return user['active_time']
+
+
+def find_users():
+  with Client(
+  api_key="zftgnq7HAK3kCmPLK65UJDDtYdqhbCVS", url="http://localhost:3939"
+  ) as client:
+    find_results = client.users.find()
+    find_results.sort(key=sort_by_login, reverse=True)
+    return find_results
+
+recent_users = find_users()
+```
+
+```{python}
+#| echo: false
+
+from IPython.display import Markdown
+from tabulate import tabulate
+
+display_users = []
+for user in recent_users:
+  display_users.append({
+    'email': user.email,
+    'name': f'{user.first_name} {user.last_name}',
+    'username': user.username,
+    'last_active': user.active_time
+  })
+
+
+# fishy = ['Email', 'Name', 'Username' 'Last Active']
+# header = display_users[0].keys()
+rows = [x.values() for x in display_users]
+
+Markdown(tabulate( rows, headers=["Email", "Name", "Username", "Last Active"]))
+```

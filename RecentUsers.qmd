@@ -5,9 +5,13 @@ title: "Last 10 Active Users"
 ```{python}
 #| echo: false
 
+from IPython.display import Markdown
+from datetime import *
+from posit.connect import Client
+from tabulate import tabulate
 import json
 import os
-from posit.connect import Client
+import pytz
 
 CONNECT_API_KEY = os.getenv('CONNECT_API_KEY')
 CONNECT_SERVER = os.getenv('CONNECT_SERVER')
@@ -23,15 +27,6 @@ def find_users():
     find_results.sort(key=sort_by_login, reverse=True)
     return find_results
 
-```
-
-```{python}
-#| echo: false
-
-from IPython.display import Markdown
-from tabulate import tabulate
-from datetime import *
-import pytz
 
 def last_active_time(dt):
   utc_time = pytz.utc.localize(dt)
@@ -58,10 +53,10 @@ if CONNECT_API_KEY and CONNECT_SERVER:
 
   output = tabulate( rows, headers=["Email", "Name", "Username", "Last Active"])
 else:
-  output = '''
-  **Incomplete Setup**
+  output = '''## Incomplete Setup
 
-  Please visit the **Vars** settings pane for this content and set the following variables:\n
+  Please visit the **Vars** settings pane for this content and set the following variables:
+
   * `CONNECT_API_KEY` (e.g., `'zftgnq7HAK3kCmPLK65UJDDtYdqhbCVS'`)
   * `CONNECT_SERVER` (e.g., `'https://posit-connect.example.com:3939'`)
 

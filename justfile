@@ -2,4 +2,4 @@ serve:
   quarto preview
 
 bundle:
-  tar zcf connect-extension-recent-users.tgz ./manifest.json ./requirements.txt ./RecentUsers.qmd ./connect-extensions.toml
+  tar zcf dist/connect-extension-recent-users.tgz ./manifest.json ./requirements.txt ./RecentUsers.qmd ./connect-extension.toml

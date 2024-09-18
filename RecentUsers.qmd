@@ -35,33 +35,19 @@ def last_active_time(dt):
   # return local_time.strftime("%Y-%m-%d %-I:%M %p")
   return local_time.strftime("%c")
 
-output = None
-if CONNECT_API_KEY and CONNECT_SERVER:
-  recent_users = find_users()
-  display_users = []
-  for user in recent_users[:10]:
-    local_time = datetime.strptime(user.active_time, '%Y-%m-%dT%H:%M:%SZ')
+recent_users = find_users()
+display_users = []
+for user in recent_users[:10]:
+  local_time = datetime.strptime(user.active_time, '%Y-%m-%dT%H:%M:%SZ')
 
-    display_users.append({
-      'email': user.email,
-      'name': f'{user.first_name} {user.last_name}',
-      'username': user.username,
-      'last_active': last_active_time(local_time)
-    })
+  display_users.append({
+    'email': user.email,
+    'name': f'{user.first_name} {user.last_name}',
+    'username': user.username,
+    'last_active': last_active_time(local_time)
+  })
 
-  rows = [x.values() for x in display_users]
+rows = [x.values() for x in display_users]
 
-  output = tabulate( rows, headers=["Email", "Name", "Username", "Last Active"])
-else:
-  output = '''## Incomplete Setup
-
-  Please visit the **Vars** settings pane for this content and set the following variables:
-
-  * `CONNECT_API_KEY` (e.g., `'zftgnq7HAK3kCmPLK65UJDDtYdqhbCVS'`)
-  * `CONNECT_SERVER` (e.g., `'https://posit-connect.example.com:3939'`)
-
-  Once those variables are set you can re-render this content to view the report.
-  '''
-
-Markdown(output)
+Markdown(tabulate( rows, headers=["Email", "Name", "Username", "Last Active"]))
 ```
